@@ -22,6 +22,8 @@ shell是一个作为用户与Linux系统间接口的程序，它允许用户向�
 查看 bash 的版本号：
 ```
 /bin/bash --version
+GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin17)
+Copyright (C) 2007 Free Software Foundation, Inc.
 ```
 
 ## 2.4 管道和重定向
