@@ -85,5 +85,109 @@ gcc -o hello hello.c
 - .a代表传统的静态函数库;
 - .so代表共享函数库。
 
+### 4.静态库
 
+fred.c
+```
+#include <stdio.h>
+
+void fred(int arg)
+{
+	printf("fred: we passed %d\n",arg);
+}
+```
+
+bill.c
+```
+#include <stdio.h>
+
+void bill(char *arg)
+{
+	printf("bill: we passed %s\n", arg);
+}
+```
+
+编译：
+```
+gcc -c bill.c fred.c
+ls *.o
+bill.o fred.o
+```
+-c 选项的作用是阻止编译器创建一个完整的程序。如果此时试图创建一个完整的程序将不会成功，因为你还未定义main函数。
+
+为你的库文件创建一个头文件。这个头文件将声明你的库文件中的函数，它应该被所有希望使用你的库文件的应用程序所包含。把这个头文件包含在
+源文件fred.c和bill.c中是一个好主意，它将帮助编译器发现所有错误。
+
+lib.h
+```
+/*
+	This is lib.h. It declares the functions fred and bill for users
+*/
+
+void bill(char *);
+void fred(int);
+```
+
+调用程序(program.c)非常简单。它包含库的头文件并且调用库中的一个函数。
+
+program.c
+```
+#include <stdlib.h>
+#include "lib.h"
+
+int main()
+{
+	bill("Hello World");
+	exit(0);
+}
+```
+
+现在，你可以编译并测试这个程序了。你暂时为编译器显式指定目标文件，然后要求编译器
+编译你的文件并将其与先前编译好的目标模块bill.o链接。
+```
+gcc -C program.c
+gcc -。program program.o bi11.o
+./program
+bill: we passed Hello World
+```
+
+现在，你将创建并使用一个库文件。你使用 ar 程序创建一个归档文件并将你的目标文件添加进去。
+这个程序之所以称为ar,是因为它将若干单独的文件归并到一个大的文件中以创建归档文件或集合。
+注意，你也可以用 ar 程序来创建任何类型文件的归档文件(与许多UNIX工具一样，ar是一个通用工具)。
+```
+ar crv libfoo.a bi11.o fred.o
+a - bill.o
+a - fred.o
+```
+
+库文件创建好了，两个目标文件也已添加进去。在某些系统，尤其是从Berkeley UNIX衍生的
+系统中，要想成功地使用函数库，你还需要为函数库生成一个内容表。你可以通过ranlib命令来完成
+这一工作。在Linux中，当你使用的是GNU的软件开发工具时，这-步骤并不是必需的(但做了也无妨)。
+```
+ranlib libfoo.a
+```
+你的函数库现在可以使用了。你可以在编译器使用的文件列表中添加该库文件以创建你的程序，
+如下所示:
+```
+gcc -0 program program.o libfoo.a
+./program
+bi1l: we passed Hello World
+```
+
+要查看哪些函数被包含在目标文件、困数库或可执行文件里，你可以使用nm命令。
+如果你查看 program 和 libfoo.a ,你就会看到函数库
+libfoo.a 中包含 fred 和 bi11 两个函数，
+而 program 里只包含函数 bill
+
+
+### 5.共享库
+
+静态库的一个缺点是，当你同时运行许多应用程序并且它们都使用来自同一个函数库的函数时，
+内存中就会有同一函数的多份副本，而且在程序文件自身中也有多份同样的副本。这将消耗大量宝贵
+的内存和磁盘空间。
+
+
+当一个程序使用共享库时，它的链接方式是这样的:程序本身不再包含函数代码，而是引用运行
+时可访问的共享代码。当编译好的程序被装载到内存中执行时，函数引用被解析并产生对共享库的调
+用，如果有必要，共享库才被加载到内存中。
 
