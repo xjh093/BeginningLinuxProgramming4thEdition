@@ -145,8 +145,8 @@ int main()
 现在，你可以编译并测试这个程序了。你暂时为编译器显式指定目标文件，然后要求编译器
 编译你的文件并将其与先前编译好的目标模块bill.o链接。
 ```
-gcc -C program.c
-gcc -。program program.o bi11.o
+gcc -c program.c
+gcc -o program program.o bi11.o
 ./program
 bill: we passed Hello World
 ```
@@ -169,7 +169,7 @@ ranlib libfoo.a
 你的函数库现在可以使用了。你可以在编译器使用的文件列表中添加该库文件以创建你的程序，
 如下所示:
 ```
-gcc -0 program program.o libfoo.a
+gcc -o program program.o libfoo.a
 ./program
 bi1l: we passed Hello World
 ```
