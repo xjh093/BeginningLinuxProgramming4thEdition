@@ -120,4 +120,80 @@ cat mydata.txt | sort | uniq > mydata.txt
 
 
 ### 2.5.1 交互式程序
+假设你想要从大量 C 语言源文件中查找包含字符串 POSIX 的文件。
+与其使用 grep 命令在每个文件中搜索字符串，
+然后再分别列出包含该字符串的文件，
+不如用下面的交互式脚本来执行整个操作:
+
+```
+for file in *
+do
+if grep -l POSIX $file
+then
+more $file
+fi
+done
+```
+在这个例子中，grep 命令输出它找到的包含 POSIX 字符串的文件，
+然后 more 命令将文件的内容显示在屏幕上。
+
+
+另一种更有效的方式：
+```
+more `grep -l POSIX *`
+```
+或者：
+```
+more ${grep -l POSIX *}
+```
+
+下面的命令将输出包含 POSIX 字符串的文件名：
+```
+grep -l POSIX * | more
+```
+
+
+通配符 * 用来匹配一个字符串
+
+通配符 ? 用来匹配一个字符
+
+
+这个命令将列出文件 my_fingers 和 my_toes
+
+```
+ls my_{finger,toe}s
+```
+
+
+### 2.5.2 创建脚本
+
+first
+
+```
+#! /bin/sh
+
+# first
+# This file looks through all the files in the current
+# directory for the string POSIX, and then prints the names of 
+# those files to the standard output
+
+for file in *
+do
+  if grep -q POSIX $file
+  then
+   echo $file
+  fi
+done
+
+exit 0
+```
+
+'#' 表示注释
+
+#!/bin/sh 是一种特殊形式的注释，#!字符告诉系统在它后面的那个参数是用来执行本文件的程序
+
+
+在 shell 程序设计里，0 表示成功
+
+## 2.5.3
 
