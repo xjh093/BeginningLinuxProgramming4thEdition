@@ -400,7 +400,7 @@ The script is now complete
 
 test 命令用法：检查一个文件是否存在
 
-test -f <filename>
+test -f filename
   
 ```
 if test -f fred.c
