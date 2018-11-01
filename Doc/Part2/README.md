@@ -66,7 +66,7 @@ kill -1 1234 >killouterr.txt 2>&1
 
 你可以用 Linux 的通用“回收站”/dev/null来有效地丟弃所有的输出信息，如下所示:
 ```
-kill -1 1234 >/dev/nu11 2>&1
+kill -1 1234 >/dev/null 2>&1
 ```
 
 ### 2.4.2 重定向输入
@@ -378,6 +378,8 @@ echo "The script is now complete"
 exit 0
 ```
 
+./try_var foo bar baz
+
 输出结果：
 ```
 Hello
@@ -391,5 +393,35 @@ Sire
 Sire
 The script is now complete
 ```
+
+12.条件
+
+在实际工作中，大多数脚本程序都会广泛使用shell的布尔判断命令[或test。在一些系统上，这两个命令的作用是一样的，只是为了增强可读性，当使用[命令时，我们还使用符号]来结尾。
+
+test 命令用法：检查一个文件是否存在
+
+test -f <filename>
+  
+```
+if test -f fred.c
+then
+...
+fi
+```
+或者
+```
+if [ -f fred.c ]
+then
+...
+fi
+```
+
+```
+if [ -f fred.c ]; then
+...
+fi
+```
+
+
 
 
